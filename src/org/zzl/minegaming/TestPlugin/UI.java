@@ -26,11 +26,13 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 
 import java.awt.FlowLayout;
+import javax.swing.JSpinner;
+import javax.swing.JComboBox;
 
 public class UI extends JFrame {
 	WorldMapEditorPanel wmep;
 	UI(GBARom rom){
-		
+	
 		if(DataStore.bDataStoreInited==false){
 			new DataStore("MEH.ini", rom.getFriendlyROMHeader());//Init the store. 
 					
@@ -39,29 +41,43 @@ public class UI extends JFrame {
 		getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 11, 539, 240);
+		panel.setBounds(10, 11, 392, 240);
 		getContentPane().add(panel);
+		panel.setLayout(null);
+		
+
+
+		
+		wmep = new WorldMapEditorPanel();
+		panel.add(wmep);
+		wmep.setBounds(10,11,372,218);
+		wmep.setPreferredSize(new Dimension(512,512));
+		wmep.setBorder(UIManager.getBorder("SplitPane.border"));
+		wmep.setLayout(null);
+		wmep.Load(rom,0);
 		
 		JButton btnSave = new JButton("Save");
 		btnSave.setBounds(483, 228, 89, 23);
 		getContentPane().add(btnSave);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(408, 11, 178, 160);
+		panel_1.setBounds(412, 57, 178, 160);
 		getContentPane().add(panel_1);
 		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(526, 202, 46, 14);
-		getContentPane().add(lblNewLabel);
-		lblNewLabel.setText(Long.toHexString(DataStore.AttackNameList));
-		panel.repaint();
+		JLabel lblMap = new JLabel("Map");
+		lblMap.setBounds(421, 14, 46, 14);
+		getContentPane().add(lblMap);
 		
-		 wmep = new WorldMapEditorPanel();
-		panel.add(wmep);
-		wmep.setPreferredSize(new Dimension(512, 512));
-		wmep.setLayout(null);
-		wmep.setBorder(UIManager.getBorder("SplitPane.border"));
+		JComboBox cboMapSel = new JComboBox();
+		cboMapSel.setBounds(443, 11, 103, 20);
+		getContentPane().add(cboMapSel);
+		//Add items..
 		
-		wmep.Load(rom,2);
+		int i=0;
+		for(i=0;i<DataStore.WorldMapCount;i++){
+			String t=Integer.toString(i);
+			cboMapSel.addItem(t);
+		}
+		cboMapSel.setSelectedIndex(0);
 	}
 }

@@ -110,10 +110,7 @@ public class WorldMapEditorPanel extends JPanel
 			
 			return toSend;
 		}
-		int getTileVal(byte[] map, int index){
-			long k=map[index*2]+map[index*2+1]<<8;
-			return (int)k;
-		}
+
 		void DrawFRLG(){
 			int i=0;
 			int len=(dcmpTilemap.length);//We're 8bpp now just trying to get the regular tiles to display
@@ -209,7 +206,7 @@ public class WorldMapEditorPanel extends JPanel
 	           			
 	                for(tile_x = 0; tile_x <32; tile_x++)
 					{
-		           
+		         
 						
 			                
 		                	
@@ -218,11 +215,8 @@ public class WorldMapEditorPanel extends JPanel
 			                
 			                int kX=tile_x;
 			                int kY=(tile_y) * 64;
-			                int kZ=0*64*64;
-			                BufferedImage tile=null;
-			             
-			                
-				                 	gcBuff.drawImage(get8BPPTile(dcmpTilemap[kX + kY +kZ ] & 0xFF),
+			                int kZ=0x000;
+			                gcBuff.drawImage(get8BPPTile(dcmpTilemap[kX + kY +kZ ] & 0xFF),
 				    						srcx,
 				    						srcy,null);
 					}
@@ -233,13 +227,14 @@ public class WorldMapEditorPanel extends JPanel
 	}
         void SetupRSE(GBARom rom, int map){
     	dcmpTilemap=BitConverter.toBytes(Lz77.decompressLZ77(rom,DataStore.WorldMapTileMap[map]));
-    	 rom.Seek(DataStore.WorldMapPal[map]);
+    	
+    	rom.Seek(DataStore.WorldMapPal[map]);
  		int basepal=DataStore.WorldMapSlot[map]*0x10;
- 		byte[] pal = new byte[256];
+ 		byte[] pal=new byte[512];
  		int i=0;
  		for(i=0;i<DataStore.WorldMapPalSize[map];i++){
  			pal[basepal+i]=rom.readByte();
- 			pal[0x90+i]=pal[basepal+i];
+ 		
  			//Game reads it twice for some reason. 
  		}
  		//For whatever reason
@@ -249,7 +244,7 @@ public class WorldMapEditorPanel extends JPanel
  		
 		p = new Palette(GBAImageType.c256 ,pal);
 		
-		rawImage = new GBAImage(dcmpGFX,p,new Point(256,256));//pntSz);
+		rawImage = new GBAImage(dcmpGFX,p,new Point(512,512));//pntSz);
 		
 		bi = rawImage.getBufferedImage();
 		
@@ -292,9 +287,7 @@ public class WorldMapEditorPanel extends JPanel
 	void Load(GBARom rom, int map) {
 		
 	
-		byte[] pal=new byte[512];
-		 
-		int i=0;
+	
 
         dcmpGFX=Lz77.decompressLZ77(rom,DataStore.WorldMapGFX[map]);
 		
