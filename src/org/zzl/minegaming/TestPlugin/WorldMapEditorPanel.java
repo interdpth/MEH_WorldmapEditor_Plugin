@@ -64,6 +64,7 @@ public class WorldMapEditorPanel extends JPanel
 	
 	 int srcX;
 	    int srcY;
+		public boolean bLoaded;
 	
 	 public BufferedImage get8BPPTile(int tileNum)
 		{
@@ -110,7 +111,27 @@ public class WorldMapEditorPanel extends JPanel
 			
 			return toSend;
 		}
-
+	    void DrawPal(){
+	    	
+	    int x = 0;
+		int i=0;
+		if(i==0)return;
+		Palette pal= (Palette) (DataStore.EngineVersion==1? myPal:p);
+		for(i = 0; i < pal.getSize(); i++)
+			{
+				while(x < 16)
+				{
+					try
+					{
+						gcBuff.setColor(pal.getIndex(x));
+						gcBuff.fillRect(270+x*8, 256+i*8, 8, 8);
+					}
+					catch(Exception e){}
+					x++;
+				}
+				x = 0;
+			}
+	    }
 		void DrawFRLG(){
 			int i=0;
 			int len=(dcmpTilemap.length);//We're 8bpp now just trying to get the regular tiles to display
@@ -165,23 +186,9 @@ public class WorldMapEditorPanel extends JPanel
             }
 	      
 	        
-	              
-			        	gcBuff.drawImage(mybi[0],270,0,this);
-			        	x = 0;
-						for(i = 0; i < 6; i++)
-						{
-							while(x < 16)
-							{
-								try
-								{
-									gcBuff.setColor(myPal[i].getIndex(x));
-									gcBuff.fillRect(270+x*8, 128+i*8, 8, 8);
-								}
-								catch(Exception e){}
-								x++;
-							}
-							x = 0;
-						}
+            bLoaded=true;     
+            DrawPal();
+            DrawTileset();
 				
 			this.repaint();
 		}
@@ -221,7 +228,9 @@ public class WorldMapEditorPanel extends JPanel
 				    						srcy,null);
 					}
 				}
-        
+                bLoaded=true;  
+                DrawPal();
+                DrawTileset();
 			
 		this.repaint();
 	}
@@ -256,7 +265,8 @@ public class WorldMapEditorPanel extends JPanel
 	  
     
     void SetupFRLG(GBARom rom, int map){
-    	dcmpTilemap=BitConverter.toBytes(Lz77.decompressLZ77(rom,(int)(rom.getPointer(DataStore.WorldMapTileMap[map]) & 0x1FFFFFF)));
+    	int offset=(int)(rom.getPointer(DataStore.WorldMapTileMap[map]) & 0x1FFFFFF);
+    	dcmpTilemap=BitConverter.toBytes(Lz77.decompressLZ77(rom,offset));
     int i=0;
     int tilecounter=0;
 
@@ -284,8 +294,25 @@ public class WorldMapEditorPanel extends JPanel
 		gcBuff=imgBuffer.getGraphics();
 		DrawFRLG();
     }
+    public void DrawTileset(){
+    	int selected=UI.cboPal.getSelectedIndex();
+    	if(selected==-1){
+    		UI.cboPal.setSelectedIndex(0);
+    	}
+    	selected=UI.cboPal.getSelectedIndex();
+    	if(DataStore.EngineVersion==1){
+    	gcBuff.drawImage(rawImage.getBufferedImageFromPal(myPal[selected]),270,0,this);
+    	}else{
+    		gcBuff.drawImage(rawImage.getBufferedImage().getSubimage(0, 0, 512, 512),270,0,this);
+    	}
+    }
 	void Load(GBARom rom, int map) {
-		
+	
+		UI.cboPal.removeAllItems();
+		int i=0;	
+		for(i=0;i<DataStore.WorldMapSlot[map];i++){
+			UI.cboPal.addItem(Integer.toHexString(i));
+		}
 	
 	
 

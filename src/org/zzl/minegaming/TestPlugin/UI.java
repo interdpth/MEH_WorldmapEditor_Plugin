@@ -1,38 +1,31 @@
 package org.zzl.minegaming.TestPlugin;
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JWindow;
 import javax.swing.UIManager;
 
-import org.zzl.minegaming.GBAUtils.BitConverter;
-import org.zzl.minegaming.GBAUtils.GBAImage;
-import org.zzl.minegaming.GBAUtils.GBAImageType;
 import org.zzl.minegaming.GBAUtils.GBARom;
-import org.zzl.minegaming.GBAUtils.Lz77;
-import org.zzl.minegaming.GBAUtils.Palette;
+import org.zzl.minegaming.GBAUtils.ROMManager;
 import org.zzl.minegaming.MEH.DataStore;
-import org.zzl.minegaming.MEH.MapElements.OverworldSprites;
-
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.image.BufferedImage;
-
-import javax.swing.JSplitPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
-import java.awt.FlowLayout;
-import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.DefaultComboBoxModel;
+
 public class UI extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -475765050269912957L;
 	WorldMapEditorPanel wmep;
-	UI(GBARom rom){
-	
+	public static JComboBox cboPal;
+	public JComboBox cboMapSel;
+	UI(){
+	    GBARom rom=ROMManager.currentROM;
 		if(DataStore.bDataStoreInited==false){
 			new DataStore("MEH.ini", rom.getFriendlyROMHeader());//Init the store. 
 					
@@ -50,25 +43,21 @@ public class UI extends JFrame {
 		
 		wmep = new WorldMapEditorPanel();
 		panel.add(wmep);
-		wmep.setBounds(10,11,372,218);
+		wmep.setBounds(10,11,512,512);
 		wmep.setPreferredSize(new Dimension(512,512));
 		wmep.setBorder(UIManager.getBorder("SplitPane.border"));
 		wmep.setLayout(null);
-		wmep.Load(rom,0);
+		
 		
 		JButton btnSave = new JButton("Save");
 		btnSave.setBounds(483, 228, 89, 23);
 		getContentPane().add(btnSave);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(412, 57, 178, 160);
-		getContentPane().add(panel_1);
-		
 		JLabel lblMap = new JLabel("Map");
 		lblMap.setBounds(421, 14, 46, 14);
 		getContentPane().add(lblMap);
 		
-		JComboBox cboMapSel = new JComboBox();
+		cboMapSel = new JComboBox();
 		cboMapSel.setBounds(443, 11, 103, 20);
 		getContentPane().add(cboMapSel);
 		//Add items..
@@ -79,5 +68,27 @@ public class UI extends JFrame {
 			cboMapSel.addItem(t);
 		}
 		cboMapSel.setSelectedIndex(0);
+		
+		JLabel lblPalette = new JLabel("Palette:");
+		lblPalette.setBounds(410, 39, 46, 14);
+		getContentPane().add(lblPalette);
+		
+		UI.cboPal = new JComboBox();
+		UI.cboPal.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(wmep.bLoaded==true){
+					wmep.Load(ROMManager.currentROM, cboMapSel.getSelectedIndex());
+				}
+			}
+		});
+
+		UI.cboPal.setBounds(453, 36, 103, 20);
+		getContentPane().add(UI.cboPal);
+		
+		
+      
+		UI.cboPal.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"}));
+		UI.cboPal.setSelectedIndex(0);
+        wmep.Load(rom,0);
 	}
 }

@@ -31,8 +31,8 @@ public class Plugin extends org.zzl.minegaming.MEH.Plugin
 	public void execute()
 	{
 		
-		myWindow= new UI(rom);
-		myWindow.setSize(512, 512);
+		myWindow= new UI();
+		myWindow.setSize(629, 512);
 		myWindow.setName("Worldmap editor");
 		myWindow.setVisible(true);
 		
