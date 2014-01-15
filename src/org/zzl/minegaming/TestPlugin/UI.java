@@ -52,7 +52,7 @@ public class UI extends JFrame {
 		panel.add(wmep);
 		wmep.setBounds(10,11,256,172);
 		wmep.setPreferredSize(new Dimension(512,512));
-		wmep.setBorder(UIManager.getBorder("SplitPane.border"));
+		//wmep.setBorder(UIManager.getBorder("SplitPane.border"));
 		wmep.setLayout(null);
 		
 		
@@ -104,7 +104,7 @@ public class UI extends JFrame {
 		panel_1.add(wmtep);
 		wmtep.setBounds(10,11,512,512);
 		wmtep.setPreferredSize(new Dimension(256, 176));
-		wmtep.setBorder(UIManager.getBorder("SplitPane.border"));
+		//wmtep.setBorder(UIManager.getBorder("SplitPane.border"));
 		wmtep.setLayout(null);
 		
 		JPanel panel_2 = new JPanel();
@@ -119,7 +119,7 @@ public class UI extends JFrame {
 		panel_2.add(wmpep);
 		wmpep.setBounds(0,0,512,512);
 		wmpep.setPreferredSize(new Dimension(512, 512));
-		wmpep.setBorder(UIManager.getBorder("SplitPane.border"));
+		//wmpep.setBorder(UIManager.getBorder("SplitPane.border"));
 		wmpep.setLayout(null);
 		
       
