@@ -9,6 +9,7 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -99,7 +100,8 @@ public class WorldMapPalEditorPanel extends JPanel
 	 }
 	 void DrawPal()
 	 {
-	    	
+	    	if(WorldMapEditorPanel.tilemapBuffer == null)
+	    		return;
 		   switch(WorldMapEditorPanel.tilemapBuffer.myType){
 		   case c16:
 			   DrawPal4BPP();
@@ -183,6 +185,16 @@ public class WorldMapPalEditorPanel extends JPanel
     	super.paintComponent(g);
 
 			g.drawImage(imgBuffer, 0, 0, this);
+			File outputfile = new File("saved.png");
+		    try
+			{
+				ImageIO.write((RenderedImage) imgBuffer, "png", outputfile);
+			}
+			catch (IOException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			int x = 0;
 			int i=0;
 

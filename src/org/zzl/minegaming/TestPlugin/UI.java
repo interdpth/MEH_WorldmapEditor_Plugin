@@ -108,7 +108,7 @@ public class UI extends JFrame {
 		wmtep.setLayout(null);
 		
 		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(324, 217, 229, 53);
+		panel_2.setBounds(313, 217, 261, 208);
 		getContentPane().add(panel_2);
 		
 		JLabel lblPalette = new JLabel("Palette:");
@@ -118,7 +118,7 @@ public class UI extends JFrame {
 		 wmpep = new WorldMapPalEditorPanel();
 		panel_2.add(wmpep);
 		wmpep.setBounds(0,0,512,512);
-		wmpep.setPreferredSize(new Dimension(512, 512));
+		wmpep.setPreferredSize(new Dimension(256, 256));
 		//wmpep.setBorder(UIManager.getBorder("SplitPane.border"));
 		wmpep.setLayout(null);
 		
